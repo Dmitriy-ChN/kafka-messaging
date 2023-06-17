@@ -14,4 +14,5 @@ public class ReceivedMessage implements Serializable {
     private String id;
     private String message;
     private Integer number;
+    private String publisher;
 }

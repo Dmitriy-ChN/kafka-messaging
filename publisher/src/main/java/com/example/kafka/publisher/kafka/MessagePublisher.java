@@ -1,5 +1,6 @@
 package com.example.kafka.publisher.kafka;
 
+import com.example.kafka.domain.TextMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MessagePublisher {
     private final KafkaProperties properties;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, TextMessage> kafkaTemplate;
 
     public void sendMessage(String message) {
-        var future = kafkaTemplate.send(properties.topics(), message);
+        var textMessage = new TextMessage(message, this.getClass().getName());
+        var future = kafkaTemplate.send(properties.topics(), textMessage);
 
         future.whenComplete((result, exception) -> {
             if (exception == null) {
